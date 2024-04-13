@@ -1,3 +1,4 @@
 - Changement de l'emplacement des MenuItem Enregistrer et Enregistrer sous... afin d'avoir un Menu plus ergonomique.
 - Suppression de certain short-cut pair les MenuItem.
-
+- Ajout du MenuItem Pdf
+- Ajout de l'export en Pdf

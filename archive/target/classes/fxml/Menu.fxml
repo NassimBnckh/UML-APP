@@ -53,7 +53,8 @@
               <items>
                   <MenuItem fx:id="exportToPuml" disable="true" mnemonicParsing="false" onAction="#exportPUML" text="PlantUML" />
                   <MenuItem fx:id="exportToXMI" disable="true" mnemonicParsing="false" onAction="#exportXMI" text="XMI" />
-                  <MenuItem fx:id="exportToPicture" disable="true" mnemonicParsing="false" onAction="#exportImgPdf" text="Image" />
+                  <MenuItem fx:id="exportToPicture" disable="true" mnemonicParsing="false" onAction="#exportImg" text="Image" />
+                  <MenuItem fx:id="pdf" mnemonicParsing="false" onAction="#exportPdf" text="PDF" />
               </items>
             </Menu>
             <MenuItem fx:id="print" disable="true" mnemonicParsing="false" onAction="#print" text="Imprimer">

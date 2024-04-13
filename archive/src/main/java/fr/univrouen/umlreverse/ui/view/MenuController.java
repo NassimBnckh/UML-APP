@@ -4,6 +4,7 @@ import fr.univrouen.umlreverse.UmlReverseBeans;
 
 
 
+
 import fr.univrouen.umlreverse.model.diagram.clazz.view.ClassDiagram;
 import fr.univrouen.umlreverse.model.diagram.clazz.view.IClassDiagram;
 import fr.univrouen.umlreverse.model.diagram.packag.IPackageDiagram;
@@ -38,6 +39,16 @@ import javafx.stage.Window;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -390,11 +401,11 @@ public class MenuController {
 
 
     /**
-     * Export to image PDF.
+     * Export to image PNG.
      *
      * @throws IOException
      */
-    public void exportImgPdf() throws IOException {
+    public void exportImg() throws IOException {
         SnapshotParameters sp = new SnapshotParameters();
         sp.setFill(Color.TRANSPARENT);
         BufferedImage img = SwingFXUtils.fromFXImage(
@@ -411,6 +422,58 @@ public class MenuController {
             writer.write(img);
         }
     }
+    
+    
+    /**
+     * Export to image PDF.
+     *
+     * @throws IOException
+     */
+    public void exportPdf() throws IOException {
+        SnapshotParameters sp = new SnapshotParameters();
+        sp.setFill(Color.TRANSPARENT);
+        BufferedImage img = SwingFXUtils.fromFXImage(
+                beans.getEditor().getCanvas().snapshot(sp, null),
+                null);
+
+        // Get image dimensions
+        int imgWidth = img.getWidth();
+        int imgHeight = img.getHeight();
+
+        // Add some extra space around the image
+        float extraSpace = 100; // Adjust as needed
+        float pageWidth = imgWidth + 2 * extraSpace;
+        float pageHeight = imgHeight + 2 * extraSpace;
+
+        // Create a new PDF document with a larger page size
+        PDDocument doc = new PDDocument();
+        PDPage page = new PDPage(new PDRectangle(pageWidth, pageHeight));
+        doc.addPage(page);
+
+        // Calculate image position with extra space
+        float imageX = extraSpace;
+        float imageY = extraSpace;
+
+        // Embed the image into the PDF
+        PDImageXObject pdImage = LosslessFactory.createFromImage(doc, img);
+        try (PDPageContentStream contentStream = new PDPageContentStream(doc, page)) {
+            contentStream.drawImage(pdImage, imageX, imageY, imgWidth, imgHeight);
+        }
+
+        // Save the PDF document
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Exporter le diagramme en PDF");
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF", "*.pdf"));
+        File f = fc.showSaveDialog(bar.getScene().getWindow());
+        if (f != null) {
+            doc.save(f);
+        }
+
+        // Close the PDF document
+        doc.close();
+    }
+    
+    
 
     /**
      * Print a diagram.
