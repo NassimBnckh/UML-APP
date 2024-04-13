@@ -2,3 +2,4 @@
 - Suppression de certain short-cut pair les MenuItem.
 - Ajout du MenuItem Pdf
 - Ajout de l'export en Pdf
+- Reste a ajouter les shortcuts sur les exports et la creation !!
